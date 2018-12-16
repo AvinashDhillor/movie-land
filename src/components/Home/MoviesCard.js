@@ -1,9 +1,14 @@
 import React from 'react';
 
-export default function MoviesCard() {
+function MoviesCard(props) {
   return (
     <div>
-      <h1>This will show movies card on page</h1>
+      <img src={props.detail.Poster} />
+      <h4>Title: {props.detail.Title}</h4>
+      <p>Released year: {props.detail.Year}</p>
+      <p>Type: {props.detail.Type}</p>
     </div>
   );
 }
+
+export default MoviesCard;
