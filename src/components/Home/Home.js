@@ -7,10 +7,30 @@ class Home extends Component {
     this.state = {
       input: '',
       searchText: '',
+      key: '318c98f3',
+      totalResults: 0,
       movies: []
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchText !== this.state.searchText) {
+      fetch(
+        `http://www.omdbapi.com/?s=${this.state.searchText}&apikey=${
+          this.state.key
+        }`
+      )
+        .then(res => res.json())
+        .then(data => {
+          let content;
+          content = data.Search.length === 0 ? [] : data.Search;
+          this.setState({
+            movies: content,
+            totalResults: data.totalResults
+          });
+        });
+    }
   }
 
   onChange(e) {
@@ -25,33 +45,23 @@ class Home extends Component {
     this.setState(prevState => ({
       searchText: prevState.input
     }));
-    e.target.elements.search.value = '';
-
-    fetch('http://www.omdbapi.com/?s=superman%20vs%20batman&apikey=318c98f3')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data.Search);
-        this.setState({
-          movies: data
-        });
-      });
   }
 
   render() {
-    let renderContent;
-    if (this.state.movies.length === 0) {
-      renderContent = <h1>Show top 10 movies</h1>;
-    } else {
-      renderContent = <MoviesCard />;
-    }
-
     return (
       <div>
         <form onSubmit={this.onSubmit}>
           <input type='text' name='search' onChange={this.onChange} />
           <button type='submit'>Search</button>
         </form>
-        {renderContent}
+
+        {this.state.movies.length > 0 ? (
+          this.state.movies.map(movie => {
+            return <MoviesCard detail={movie} />;
+          })
+        ) : (
+          <p>Nothing to show</p>
+        )}
       </div>
     );
   }
