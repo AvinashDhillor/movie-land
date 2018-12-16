@@ -11,9 +11,8 @@ class Home extends Component {
       totalResults: 0,
       movies: []
     };
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
+  
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchText !== this.state.searchText) {
       fetch(
@@ -23,8 +22,7 @@ class Home extends Component {
       )
         .then(res => res.json())
         .then(data => {
-          let content;
-          content = data.Search.length === 0 ? [] : data.Search;
+          let content = !data.Search ? [] : data.Search;
           this.setState({
             movies: content,
             totalResults: data.totalResults
@@ -33,14 +31,16 @@ class Home extends Component {
     }
   }
 
-  onChange(e) {
-    let value = e.target.value;
-    this.setState({
-      input: value
-    });
+  onChange = e => {
+    let value = e.target.value.trim();
+    if(value) {
+      this.setState({
+        input: value.split(" ").join("+")
+      });
+    }
   }
 
-  onSubmit(e) {
+  onSubmit = e => {
     e.preventDefault();
     this.setState(prevState => ({
       searchText: prevState.input
@@ -57,11 +57,14 @@ class Home extends Component {
 
         {this.state.movies.length > 0 ? (
           this.state.movies.map(movie => {
-            return <MoviesCard detail={movie} />;
+            return <MoviesCard detail={movie} key={movie.imdbID}/>;
           })
-        ) : (
+        ) : !this.state.searchText ? (
           <p>Nothing to show</p>
-        )}
+        ) : (
+          <p>No Movie found!</p>
+        )
+        }
       </div>
     );
   }
