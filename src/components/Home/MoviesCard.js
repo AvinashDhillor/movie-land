@@ -15,7 +15,6 @@ function MoviesCard(props) {
               ? props.detail.Poster
               : './no-image.jpg'
           }
-          alt={props.detail.Title}
         />
         <p>
           <strong>Title: </strong>
