@@ -56,6 +56,7 @@ class Home extends Component {
         <div>
           <form onSubmit={this.onSubmit} className='form'>
             <input
+              placeholder='Type movie name here...'
               className='textfield'
               type='text'
               name='search'
