@@ -54,20 +54,20 @@ class Home extends Component {
         <div>
           <form onSubmit={this.onSubmit} className='form'>
             <input
-              class='textfield'
+              className='textfield'
               type='text'
               name='search'
               onChange={this.onChange}
             />
-            <button class='searchbutton' type='submit'>
-              <i class='fas fa-search' />
+            <button className='searchbutton' type='submit'>
+              <i className='fas fa-search' />
             </button>
           </form>
         </div>
         <div className='cardInterface'>
           {this.state.movies.length > 0 ? (
-            this.state.movies.map(movie => {
-              return <MoviesCard detail={movie} key={movie.imdbID} />;
+            this.state.movies.map((movie, index) => {
+              return <MoviesCard detail={movie} key={index} />;
             })
           ) : !this.state.searchText ? null : (
             <p>No Movie found!</p>
