@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MoviesCard from './MoviesCard';
+import './Home.css';
 
 class Home extends Component {
   constructor(props) {
@@ -12,7 +13,7 @@ class Home extends Component {
       movies: []
     };
   }
-  
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchText !== this.state.searchText) {
       fetch(
@@ -33,38 +34,45 @@ class Home extends Component {
 
   onChange = e => {
     let value = e.target.value.trim();
-    if(value) {
+    if (value) {
       this.setState({
-        input: value.split(" ").join("+")
+        input: value.split(' ').join('+')
       });
     }
-  }
+  };
 
   onSubmit = e => {
     e.preventDefault();
     this.setState(prevState => ({
       searchText: prevState.input
     }));
-  }
+  };
 
   render() {
     return (
       <div>
-        <form onSubmit={this.onSubmit}>
-          <input type='text' name='search' onChange={this.onChange} />
-          <button type='submit'>Search</button>
-        </form>
-
-        {this.state.movies.length > 0 ? (
-          this.state.movies.map(movie => {
-            return <MoviesCard detail={movie} key={movie.imdbID}/>;
-          })
-        ) : !this.state.searchText ? (
-          <p>Nothing to show</p>
-        ) : (
-          <p>No Movie found!</p>
-        )
-        }
+        <div>
+          <form onSubmit={this.onSubmit} className='form'>
+            <input
+              class='textfield'
+              type='text'
+              name='search'
+              onChange={this.onChange}
+            />
+            <button class='searchbutton' type='submit'>
+              <i class='fas fa-search' />
+            </button>
+          </form>
+        </div>
+        <div className='cardInterface'>
+          {this.state.movies.length > 0 ? (
+            this.state.movies.map(movie => {
+              return <MoviesCard detail={movie} key={movie.imdbID} />;
+            })
+          ) : !this.state.searchText ? null : (
+            <p>No Movie found!</p>
+          )}
+        </div>
       </div>
     );
   }
