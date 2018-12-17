@@ -7,6 +7,7 @@ function MoviesCard(props) {
       href={`https://www.imdb.com/title/${props.detail.imdbID}`}
       target='_blank'
       style={{ textDecoration: 'none', color: 'black' }}
+      onClick={props.onOpenModal.bind(this, props.detail.imdbID)}
     >
       <div className='card'>
         <img
