@@ -1,13 +1,35 @@
 import React from 'react';
 
 function MoviesCard(props) {
+  let title = props.detail.Title;
   return (
-    <div>
-      <img src={props.detail.Poster} />
-      <h4>Title: {props.detail.Title}</h4>
-      <p>Released year: {props.detail.Year}</p>
-      <p>Type: {props.detail.Type}</p>
-    </div>
+    <a
+      href={`https://www.imdb.com/title/${props.detail.imdbID}`}
+      target='_blank'
+      style={{ textDecoration: 'none', color: 'black' }}
+    >
+      <div className='card'>
+        <img
+          src={
+            props.detail.Poster !== 'N/A'
+              ? props.detail.Poster
+              : './no-image.jpg'
+          }
+        />
+        <p>
+          <strong>Title: </strong>
+          {title.substring(0, 20)}..
+        </p>
+        <p>
+          <strong>Released Year: </strong>
+          {props.detail.Year}
+        </p>
+        <p>
+          <strong>Type: </strong>
+          {props.detail.Type}
+        </p>
+      </div>
+    </a>
   );
 }
 
