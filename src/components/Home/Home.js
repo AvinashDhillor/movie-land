@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MoviesCard from './MoviesCard';
+import Spinner from '../common/Spinner';
 import './Home.css';
 
 class Home extends Component {
@@ -9,13 +10,13 @@ class Home extends Component {
       input: '',
       searchText: '',
       key: '318c98f3',
-      totalResults: 0,
+      loading: false,
       movies: []
     };
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchText !== this.state.searchText) {
+    if (prevState.searchText !== this.state.searchText || this.state.loading) {
       fetch(
         `http://www.omdbapi.com/?s=${this.state.searchText}&apikey=${
           this.state.key
@@ -26,7 +27,7 @@ class Home extends Component {
           let content = !data.Search ? [] : data.Search;
           this.setState({
             movies: content,
-            totalResults: data.totalResults
+            loading: false
           });
         });
     }
@@ -44,7 +45,8 @@ class Home extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.setState(prevState => ({
-      searchText: prevState.input
+      searchText: prevState.input,
+      loading: true
     }));
   };
 
@@ -64,6 +66,7 @@ class Home extends Component {
             </button>
           </form>
         </div>
+        {this.state.loading ? <Spinner /> : null}
         <div className='cardInterface'>
           {this.state.movies.length > 0 ? (
             this.state.movies.map((movie, index) => {
